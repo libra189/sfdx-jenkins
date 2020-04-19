@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="WireGetRecordDynamicContact" icon-name="standard:contact">
+        <template if:true={account.data}>
+            <div class="slds-m-around_medium">
+                <p>ID: {id}</p>
+                <p>Name: {name}</p>
+                <p>SLA__c: {sla}</p>
+            </div>
+        </template>
+        <template for:each={contacts} for:item="contact">
+            <div key={contact.Id}>
+                <p>{contact.Id} {contact.Name} {contact.Email}</p>
+            </div>
+        </template>
+    </lightning-card>
+</template>

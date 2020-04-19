@@ -1,0 +1,18 @@
+<template>
+    <lightning-card title="今日の天気" icon-name="custom:custom14">
+        <div class="slds-m-around_medium">
+            <div class="weather">
+                <lightning-input type="search"
+                    onchange={handleSearchTermChange}
+                    variant="label-hidden"
+                    class="slds-m-bottom_small"
+                    label="Search"
+                    placeholder="地域別に定義されたID番号"
+                    value={searchCity}>
+                </lightning-input>
+                <div class="title">{title}</div>
+                <div class="description">{weather}</div>
+            </div>
+        </div>
+    </lightning-card>
+</template>
