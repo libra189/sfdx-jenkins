@@ -1,18 +1,11 @@
 <template>
-    <lightning-card title="今日の天気" icon-name="custom:custom14">
+    <lightning-card title="ContactInformation" icon-name="custom:custom14">
         <div class="slds-m-around_medium">
-            <div class="weather">
-                <lightning-input type="search"
-                    onchange={handleSearchTermChange}
-                    variant="label-hidden"
-                    class="slds-m-bottom_small"
-                    label="Search"
-                    placeholder="地域別に定義されたID番号"
-                    value={searchCity}>
-                </lightning-input>
-                <div class="title">{title}</div>
-                <div class="description">{weather}</div>
-            </div>
+           <template for:each={contacts} for:item="contact">
+              <div key={contact.Id}>
+                 {contact.Name}, {contact.Title}
+              </div>
+           </template>
         </div>
-    </lightning-card>
+     </lightning-card>
 </template>
