@@ -2,6 +2,7 @@
   "name": "salesforce_de",
   "version": "1.0.0",
   "description": "## Dev, Build and Test",
+  "repository": "git@github.com:libra189/salesforce_de.git",
   "dependencies": {
     "typescript": "^3.8.3"
   },
