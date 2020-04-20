@@ -2,11 +2,24 @@
   "name": "salesforce_de",
   "version": "1.0.0",
   "description": "## Dev, Build and Test",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "devDependencies": {
+    "@salesforce/eslint-config-lwc": "^0.5.0",
+    "@salesforce/sfdx-lwc-jest": "^0.7.1",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0"
   },
-  "keywords": ["salesforce", "lwc"],
-  "author": "",
+  "scripts": {
+    "lint": "eslint **/lwc/**/*.js",
+    "test": "npm run lint && npm run test:unit",
+    "test:unit": "sfdx-lwc-jest",
+    "test:unit:watch": "sfdx-lwc-jest --watch",
+    "test:unit:debug": "sfdx-lwc-jest --debug",
+    "test:unit:cov": "sfdx-lwc-jest --coverage"
+  },
+  "keywords": [
+    "salesforce",
+    "lwc"
+  ],
+  "author": "libra189",
   "license": "ISC"
 }

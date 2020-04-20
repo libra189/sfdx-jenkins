@@ -37,6 +37,7 @@ Temporary Items
 .metadata
 build.properties
 config
+node_modules
 
 # Apex Log as optional
 apex-scripts/log
