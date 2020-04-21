@@ -14,4 +14,13 @@ public with sharing class AccountController {
             LIMIT 10
         ];
     }
+
+    @AuraEnabled(cacheable=true)
+    public static Account getRecord(String id) {
+        return [
+            SELECT Id, Name, Phone, Owner.Name
+            FROM Account
+            WHERE Id = :id
+        ];
+    }
 }
