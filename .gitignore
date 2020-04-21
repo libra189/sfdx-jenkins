@@ -99,4 +99,7 @@ TestsResultsCache.xml
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 
+### jest coverage ###
+coverage
+
 # End of https://www.gitignore.io/api/macos,salesforcedx,visualstudiocode
