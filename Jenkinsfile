@@ -19,7 +19,14 @@ pipeline {
                 }
                 stage("Authentication SFDX") {
                     steps {
-                        sh 'sfdx force:auth:jwt:grant -i ${CONSUMER_KEY} -u ${HUB_USERNAME} -f ${JWT_KEY_FILE} -a jwt'
+                        rc = sh(
+                            returnStatus: true,
+                            script: 'sfdx force:auth:jwt:grant -i ${CONSUMER_KEY} -u ${HUB_USERNAME} -f ${JWT_KEY_FILE} -a jwt'
+                        )
+                        if (rc != 0) {
+                            error message: '開発組織への認証失敗'
+                        }
+
                     }
                     post {
                         success {
@@ -31,16 +38,22 @@ pipeline {
         }
         stage("Run Test") {
             steps {
-                sh(
-                    script: '''
-                    sfdx force:apex:test:run \
-                    --codecoverage \
-                    --resultformat json \
-                    --outputdir ${RUN_ARTIFACT_DIR} \
-                    --targetusername ${HUB_USERNAME} \
-                    --classnames ${TEST_CLASSES}
-                    '''
-                )
+                timeout(time: 120, unit: 'SECONDS') {
+                    rc = sh(
+                        returnStatus: true,
+                        script: '''
+                        sfdx force:apex:test:run \
+                        --codecoverage \
+                        --resultformat json \
+                        --outputdir ${RUN_ARTIFACT_DIR} \
+                        --targetusername ${HUB_USERNAME} \
+                        --classnames ${TEST_CLASSES}
+                        '''
+                    )
+                    if (rc != 0) {
+                        error message: 'Apexテスト実行失敗'
+                    }
+                }
             }
             post {
                 success {
