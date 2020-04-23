@@ -19,9 +19,15 @@ pipeline {
                 }
                 stage("Authentication SFDX") {
                     steps {
-                        rc = sh(
+                        def rc = sh(
                             returnStatus: true,
-                            script: 'sfdx force:auth:jwt:grant -i ${CONSUMER_KEY} -u ${HUB_USERNAME} -f ${JWT_KEY_FILE} -a jwt'
+                            script: '''
+                            sfdx force:auth:jwt:grant \
+                            --clientid ${CONSUMER_KEY} \
+                            --username ${HUB_USERNAME} \
+                            --jwtkeyfile ${JWT_KEY_FILE} \
+                            --setalias prod
+                            '''
                         )
                         if (rc != 0) {
                             error message: '開発組織への認証失敗'
@@ -78,6 +84,35 @@ pipeline {
                         }
                     }
                 }
+            }
+        }
+        stage("本番組織へデプロイ") {
+            steps {
+                def rs = sh(
+                    returnStatus: true,
+                    script: '''
+                    sfdx force:auth:jwt:grant \
+                    --clientid ${PROD_CONSUMER_KEY} \
+                    --username ${PROD_HUB_USERNAME} \
+                    --jwtkeyfile ${PROD_JWT_KEY_FILE} \
+                    --setalias prod
+                    '''
+                )
+                if (rs != 0) {
+                    error message: '本番組織への認証失敗'
+                }
+
+                def dr = sh(
+                    returnStatus: true,
+                    script: '''
+                    sfdx force:mdapi:deploy \
+                    --deploydir manifest \
+                    --targetusername prod \
+                    --wait 10 \
+                    --testlevel RunSpecifiedTests \
+                    --runtests ${TEST_CLASSES}
+                    '''
+                )
             }
         }
     }
