@@ -86,7 +86,7 @@ pipeline {
                 }
             }
         }
-        stage("本番組織へデプロイ") {
+        stage("Deploy to Production") {
             steps {
                 def rs = sh(
                     returnStatus: true,
