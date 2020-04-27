@@ -7,4 +7,12 @@ public with sharing class AccountDetail {
             WHERE AccountId = :accountId
         ];
     }
+
+    @AuraEnabled
+    public static String addContacts(List<String> contactNames) {
+        for (String name: contactNames) {
+            System.debug(name);
+        }
+        return 'OK';
+    }
 }
