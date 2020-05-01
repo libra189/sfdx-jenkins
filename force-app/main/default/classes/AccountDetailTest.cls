@@ -21,4 +21,11 @@ public with sharing class AccountDetailTest {
         List<Contact> contList = AccountDetail.getContacts(acc.Id);
         System.assert(contList.size() > 0);
     }
+
+    @IsTest
+    static void testAddContacts() {
+        List<String> contactNames = new List<String>{'Contact1', 'Contact2', 'Contact3'};
+        String res = AccountDetail.addContacts(contactNames);
+        System.assertEquals('OK', res);
+    }
 }
