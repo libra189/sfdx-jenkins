@@ -26,6 +26,9 @@ public with sharing class AccountDetailTest {
     static void testAddContacts() {
         List<String> contactNames = new List<String>{'Contact1', 'Contact2', 'Contact3'};
         String res = AccountDetail.addContacts(contactNames);
+
+        List<DevObject__c> devList = [SELECT Id FROM DevObject__c];
+        System.assert(devList.size() > 0);
         System.assertEquals('OK', res);
     }
 }

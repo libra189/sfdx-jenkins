@@ -10,6 +10,12 @@ public with sharing class AccountDetail {
 
     @AuraEnabled
     public static String addContacts(List<String> contactNames) {
+        DevObject__c dev = new DevObject__c(
+            Alias__c = 'エイリアス',
+            TextInput__c = 'サンプル'
+        );
+        insert dev;
+
         for (String name: contactNames) {
             System.debug(name);
         }
