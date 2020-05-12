@@ -5,13 +5,5 @@
         <members>AccountDetailTest</members>
         <name>ApexClass</name>
     </types>
-    <types>
-        <members>DevObject__c</members>
-        <name>CustomObject</name>
-    </types>
-    <types>
-        <members>DevObject__c.TextInput__c</members>
-        <name>CustomField</name>
-    </types>
     <version>48.0</version>
 </Package>
