@@ -5,6 +5,7 @@ pipeline {
     environment {
         // テスト結果格納ディレクトリ
         RUN_ARTIFACT_DIR="tests/${BUILD_NUMBER}"
+        PROD_ROOT_URL="https://ap16.lightning.force.com"
     }
 
     stages {
@@ -12,27 +13,20 @@ pipeline {
             parallel {
                 stage("Git Checkout") {
                     steps {
-                        git branch: '${GIT_BRANCH_PARAM}',
+                        git branch: "${GIT_BRANCH_PARAM}",
                             credentialsId: '9a5404ed-e31a-4b55-88e1-a61051e7bb7a',
                             url: 'https://github.com/libra189/salesforce_de.git'
                     }
                 }
                 stage("Authentication SFDX") {
                     steps {
-                        def rc = sh(
-                            returnStatus: true,
-                            script: '''
-                            sfdx force:auth:jwt:grant \
-                            --clientid ${CONSUMER_KEY} \
-                            --username ${HUB_USERNAME} \
-                            --jwtkeyfile ${JWT_KEY_FILE} \
-                            --setalias prod
-                            '''
-                        )
-                        if (rc != 0) {
-                            error message: '開発組織への認証失敗'
-                        }
-
+                        sh"""
+                        sfdx force:auth:jwt:grant \
+                        --clientid ${CONSUMER_KEY} \
+                        --username ${HUB_USERNAME} \
+                        --jwtkeyfile ${JWT_KEY_FILE} \
+                        --setalias dev
+                        """
                     }
                     post {
                         success {
@@ -44,20 +38,23 @@ pipeline {
         }
         stage("Run Test") {
             steps {
-                timeout(time: 120, unit: 'SECONDS') {
-                    rc = sh(
-                        returnStatus: true,
-                        script: '''
-                        sfdx force:apex:test:run \
-                        --codecoverage \
-                        --resultformat json \
-                        --outputdir ${RUN_ARTIFACT_DIR} \
-                        --targetusername ${HUB_USERNAME} \
-                        --classnames ${TEST_CLASSES}
-                        '''
-                    )
-                    if (rc != 0) {
-                        error message: 'Apexテスト実行失敗'
+                script {
+                    timeout(time: 120, unit: 'SECONDS') {
+                        def status = sh(
+                            returnStdout: true,
+                            script:"""
+                            sfdx force:apex:test:run \
+                            --codecoverage \
+                            --resultformat json \
+                            --outputdir ${RUN_ARTIFACT_DIR} \
+                            --targetusername ${HUB_USERNAME} \
+                            --classnames ${TEST_CLASSES}
+                            """
+                        )
+
+                        if (status != 0) {
+                            error: 'テストに失敗しました'
+                        }
                     }
                 }
             }
@@ -80,7 +77,7 @@ pipeline {
 
                         // テストのコードカバレッジが75%以下のときテスト失敗
                         if (testRunCoverage < 0.75) {
-                            error message:"コードカバレッジが75%以下のため失敗"
+                            error message: 'コードカバレッジが75%以下のため失敗'
                         }
                     }
                 }
@@ -88,31 +85,30 @@ pipeline {
         }
         stage("Deploy to Production") {
             steps {
-                def rs = sh(
-                    returnStatus: true,
-                    script: '''
+                script {
+                    sh(label: 'Authentication Production',
+                    script: """
                     sfdx force:auth:jwt:grant \
                     --clientid ${PROD_CONSUMER_KEY} \
                     --username ${PROD_HUB_USERNAME} \
                     --jwtkeyfile ${PROD_JWT_KEY_FILE} \
                     --setalias prod
-                    '''
-                )
-                if (rs != 0) {
-                    error message: '本番組織への認証失敗'
-                }
+                    """
+                    )
 
-                def dr = sh(
-                    returnStatus: true,
-                    script: '''
-                    sfdx force:mdapi:deploy \
-                    --deploydir manifest \
-                    --targetusername prod \
-                    --wait 10 \
-                    --testlevel RunSpecifiedTests \
-                    --runtests ${TEST_CLASSES}
-                    '''
-                )
+                    def result = sh(label: 'Test deploy source',
+                        returnStdout: true,
+                        script: """
+                        sfdx force:source:deploy \
+                        --checkonly \
+                        --targetusername prod \
+                        --manifest manifest/package.xml \
+                        --testlevel RunSpecifiedTests \
+                        --runtests AccountDetailTest \
+                        --json
+                        """
+                    )
+                }
             }
         }
     }
