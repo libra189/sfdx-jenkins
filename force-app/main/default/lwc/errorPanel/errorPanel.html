@@ -1,0 +1,21 @@
+<template>
+    <template if:true={errors}>
+        <div class="inline-error-container slds-p-around_medium">
+            <lightning-icon icon-name="utility:error" variant="error"></lightning-icon>
+            <div class="error-content slds-p-around_small">
+                <p class="error-title slds-text-heading_small slds-text-color_error">{friendlyMessage}</p>
+                <template if:true={errorMessages.length}>
+                    <ul class="slds-list_dotted slds-p-top_small">
+                        <li for:each={errorMessages} for:item="message" key={message}>{message}</li>
+                    </ul>
+                </template>
+                <div class="slds-p-vertical_x-small">
+                    <lightning-input label="詳細を表示" type="checkbox" onchange={handleCheckboxChange}></lightning-input>
+                </div>
+                <template if:true={viewDetails}>
+                    <pre class="error-details slds-box slds-box_x-small slds-theme_default">{errorDetails}</pre>
+                </template>
+            </div>
+        </div>
+    </template>
+</template>
