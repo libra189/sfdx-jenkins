@@ -36,6 +36,7 @@ export default class MyFirstWebComponent extends LightningElement {
         window.clearTimeout(this.delayTimeout);
         const searchCity = event.target.value;
         
+        /* eslint @lwc/lwc/no-async-operation: 0 */
 		this.delayTimeout = setTimeout(() => {
             this.searchCity = searchCity;
             this.getWeather(this.searchCity);
