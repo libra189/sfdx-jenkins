@@ -1,0 +1,21 @@
+<template>
+    <lightning-card title="今日の天気" icon-name="custom:custom14">
+        <div class="slds-m-around_medium">
+            <div class="weather">
+                <template if:true={record.data}>
+                    <div class="title">
+                        <p>所在地名：{location}</p>
+                        <p>所在地番号：{location_number}</p>
+                    </div>
+                    <hr>
+                    <div class="description">
+                        <c-weather-conditions number={location_number}></c-weather-conditions>
+                    </div>
+                </template>
+                <template if:true={record.error}>
+                    <c-error-panel errors={record.error}></c-error-panel>
+                </template>
+            </div>
+        </div>
+    </lightning-card>
+</template>
