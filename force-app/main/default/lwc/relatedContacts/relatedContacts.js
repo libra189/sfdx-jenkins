@@ -1,6 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord } from 'lightning/uiRecordApi';
-// import getContacts1 from '@salesforce/apex/AccountDetail.getContacts';
+// import getContacts from '@salesforce/apex/AccountDetail.getContacts';
 
 const fields = [
     'Account.Id',
@@ -12,9 +12,9 @@ export default class RelatedContacts extends LightningElement {
     @api recordId;
 
     @wire(getRecord, { recordId: '$recordId', fields })
-    account;
-
     contacts;
+
+    account;
     error;
 
     get id() {

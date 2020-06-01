@@ -37,6 +37,7 @@ Temporary Items
 .metadata
 build.properties
 config
+node_modules
 
 # Apex Log as optional
 apex-scripts/log
@@ -100,3 +101,8 @@ TestsResultsCache.xml
 
 # End of https://www.gitignore.io/api/macos,salesforcedx,visualstudiocode
 node_modules
+### test dir ###
+coverage
+tests
+
+# End of https://www.gitignore.io/api/macos,salesforcedx,visualstudiocode

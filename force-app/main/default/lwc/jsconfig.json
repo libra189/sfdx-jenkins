@@ -20,6 +20,24 @@
             ],
             "c/weatherConditions": [
                 "weatherConditions/weatherConditions.js"
+            ],
+            "c/todayWeather": [
+                "todayWeather/todayWeather.js"
+            ],
+            "c/helloWorld": [
+                "helloWorld/helloWorld.js"
+            ],
+            "c/wireRetrieveAccount": [
+                "wireRetrieveAccount/wireRetrieveAccount.js"
+            ],
+            "c/sampleLWC": [
+                "sampleLWC/sampleLWC.js"
+            ],
+            "c/imperativeRetrieveAccount": [
+                "imperativeRetrieveAccount/imperativeRetrieveAccount.js"
+            ],
+            "c/activityHistory": [
+                "activityHistory/activityHistory.js"
             ]
         }
     },

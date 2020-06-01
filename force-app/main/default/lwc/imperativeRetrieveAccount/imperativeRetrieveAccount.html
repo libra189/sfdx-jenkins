@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="取引先一覧" icon-name="action:approval">
+        <div class="slds-m-around_medium">
+            <template if:true={accounts}>
+                <template for:each={accounts} for:item="account">
+                    <p key={account.Id}>
+                        {account.Id}: {account.Name}, {account.Phone}, {account.Owner.Name}
+                    </p>
+                </template>
+            </template>
+            <template if:true={error}>
+                <p>{error}</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,15 @@
+<template>
+    <lightning-card title="HelloWorld" icon-name="custom:custom14">
+        <div class="slds-m-around_medium">
+            <div>
+                <h3>Contacts</h3>
+                <!-- data属性に送信したい値を設定 -->
+                <lightning-input type="checkbox" label="Contact Name1" data-value="contact1"></lightning-input>
+                <lightning-input type="checkbox" label="Contact Name2" data-value="contact2"></lightning-input>
+                <lightning-input type="checkbox" label="Contact Name3" data-value="contact3"></lightning-input>
+            </div>
+        </div>
+        <lightning-button variant="brand" label="Save" onclick={save}
+                    class="slds-m-left_x-small"></lightning-button> <!-- jsのsave()呼び出し -->
+    </lightning-card>
+</template>
